@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validateur DOE - Rhôn' Telecom</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .chatbot-container {
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23ffffff" x="10" y="40" width="80" height="20" rx="10"/><rect fill="%2300aaff" x="20" y="10" width="60" height="15" rx="7"/><rect fill="%2300aaff" x="20" y="75" width="60" height="15" rx="7"/></svg>') no-repeat center;
+            background-size: contain;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .chat-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bot-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .bot-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            background: white;
+            padding: 15px;
+            border-radius: 15px 15px 15px 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 80%;
+        }
+
+        .user-message {
+            text-align: right;
+        }
+
+        .user-message .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px 15px 5px 15px;
+            margin-left: auto;
+            max-width: 80%;
+        }
+
+        .input-area {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #eee;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-button {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+        }
+
+        .file-button:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+        }
+
+        .text-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .text-input:focus {
+            border-color: #667eea;
+        }
+
+        .send-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .send-button:hover {
+            transform: scale(1.05);
+        }
+
+        .send-button:active {
+            transform: scale(0.95);
+        }
+
+        .validation-result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .valid {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .invalid {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .criteria-list {
+            margin-top: 10px;
+            font-weight: normal;
+        }
+
+        .criteria-item {
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .check-mark {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .cross-mark {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .quick-button {
+            background: #e9ecef;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .quick-button:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 5px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 3px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: #666;
+            border-radius: 50%;
+            animation: typing 1.4s ease-in-out infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbot-container">
+        <div class="header">
+            <div class="logo">🔍 Validateur DOE</div>
+            <div class="subtitle">Assistant de validation - Rhôn' Telecom</div>
+        </div>
+        
+        <div class="chat-area" id="chatArea">
+            <div class="message bot-message">
+                <div class="bot-avatar">🤖</div>
+                <div class="message-content">
+                    <div>Bonjour ! Je suis votre assistant pour valider les DOE (Dossier des Ouvrages Exécutés).</div>
+                    <div style="margin-top: 10px;">
+                        📋 <strong>Je vérifie :</strong><br>
+                        • Plans DOE avec coordonnées GPS<br>
+                        • Identification PAR et PDO<br>
+                        • Photos selon phases requises<br>
+                        • Conformité aux standards Rhôn' Telecom
+                    </div>
+                    <div class="quick-actions">
+                        <button class="quick-button" onclick="sendQuickMessage('Quels sont les critères de validation ?')">📝 Critères</button>
+                        <button class="quick-button" onclick="sendQuickMessage('Comment soumettre un DOE ?')">📤 Soumettre</button>
+                        <button class="quick-button" onclick="sendQuickMessage('Exemple DOE valide')">✅ Exemple</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="bot-avatar">🤖</div>
+            <div>
+                <span>Assistant en train d'analyser</span>
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="input-area">
+            <div class="input-container">
+                <div class="file-input-wrapper">
+                    <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                    <label for="fileInput" class="file-button" title="Joindre des fichiers">
+                        📎
+                    </label>
+                </div>
+                <input type="text" id="textInput" class="text-input" placeholder="Posez votre question ou envoyez votre DOE..." onkeypress="handleKeyPress(event)">
+                <button class="send-button" onclick="sendMessage()" title="Envoyer">
+                    ➤
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let uploadedFiles = [];
+        
+        const doeValidationCriteria = {
+            plan: {
+                gpsCoordinates: false,
+                parIdentified: false,
+                pdoIdentified: false,
+                civilEngineering: false
+            },
+            photos: {
+                phase1: false,
+                phase2: false,
+                phase3: false,
+                phase4: false
+            }
+        };
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendQuickMessage(message) {
+            const textInput = document.getElementById('textInput');
+            textInput.value = message;
+            sendMessage();
+        }
+
+        function sendMessage() {
+            const textInput = document.getElementById('textInput');
+            const message = textInput.value.trim();
+            
+            if (message || uploadedFiles.length > 0) {
+                addMessage(message, 'user');
+                textInput.value = '';
+                
+                showTypingIndicator();
+                
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    processMessage(message);
+                }, 1500);
+            }
+        }
+
+        function addMessage(content, sender) {
+            const chatArea = document.getElementById('chatArea');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            if (sender === 'bot') {
+                messageDiv.innerHTML = `
+                    <div class="bot-avatar">🤖</div>
+                    <div class="message-content">${content}</div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="message-content">${content}</div>
+                `;
+            }
+            
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'flex';
+            document.getElementById('chatArea').scrollTop = document.getElementById('chatArea').scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'none';
+        }
+
+        function processMessage(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (uploadedFiles.length > 0) {
+                validateDOE();
+                uploadedFiles = [];
+            } else if (lowerMessage.includes('critères') || lowerMessage.includes('validation')) {
+                showValidationCriteria();
+            } else if (lowerMessage.includes('soumettre') || lowerMessage.includes('envoyer')) {
+                showSubmissionInstructions();
+            } else if (lowerMessage.includes('exemple')) {
+                showValidExample();
+            } else if (lowerMessage.includes('par') || lowerMessage.includes('pdo')) {
+                explainPARPDO();
+            } else if (lowerMessage.includes('coordonnées') || lowerMessage.includes('gps')) {
+                explainGPS();
+            } else if (lowerMessage.includes('photos') || lowerMessage.includes('phases')) {
+                explainPhotos();
+            } else {
+                provideGeneralHelp();
+            }
+        }
+
+        function validateDOE() {
+            // Simulation de validation basée sur les fichiers uploadés
+            const isValid = Math.random() > 0.3; // 70% de chance d'être valide pour la demo
+            
+            if (isValid) {
+                addMessage(`
+                    <div class="validation-result valid">
+                        ✅ <strong>DOE VALIDÉ</strong>
+                    </div>
+                    <div class="criteria-list">
+                        <div class="criteria-item">
+                            <span class="check-mark">✅</span> Plan DOE avec coordonnées GPS présentes
+                        </div>
+                        <div class="criteria-item">
+                            <span class="check-mark">✅</span> PAR clairement identifié
+                        </div>
+                        <div class="criteria-item">
+                            <span class="check-mark">✅</span> PDO clairement identifié
+                        </div>
+                        <div class="criteria-item">
+                            <span class="check-mark">✅</span> Tracé du Génie Civil visible
+                        </div>
+                        <div class="criteria-item">
+                            <span class="check-mark">✅</span> Toutes les phases photos respectées
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <strong>Félicitations !</strong> Votre DOE respecte tous les critères de validation Rhôn' Telecom.
+                    </div>
+                `, 'bot');
+            } else {
+                addMessage(`
+                    <div class="validation-result invalid">
+                        ❌ <strong>DOE REFUSÉ</strong>
+                    </div>
+                    <div class="criteria-list">
+                        <div class="criteria-item">
+                            <span class="cross-mark">❌</span> Coordonnées GPS manquantes ou incorrectes
+                        </div>
+                        <div class="criteria-item">
+                            <span class="check-mark">✅</span> PAR identifié
+                        </div>
+                        <div class="criteria-item">
+                            <span class="cross-mark">❌</span> PDO non clairement identifié
+                        </div>
+                        <div class="criteria-item">
+                            <span class="cross-mark">❌</span> Photos Phase 3 manquantes
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <strong>Corrections requises :</strong><br>
+                        • Ajouter les coordonnées GPS au format WGS84<br>
+                        • Identifier clairement le PDO sur le plan<br>
+                        • Fournir les photos de la Phase 3 (alvéoles visibles)
+                    </div>
+                `, 'bot');
+            }
+        }
+
+        function showValidationCriteria() {
+            addMessage(`
+                📋 <strong>Critères de validation DOE :</strong><br><br>
+                
+                <strong>🗺️ Plan DOE :</strong><br>
+                • Coordonnées GPS/géoréférencement obligatoire<br>
+                • Identification claire du PAR (Point d'Accès Réseaux)<br>
+                • Identification claire du PDO (Point Démarcation Optique)<br>
+                • Tracé du Génie Civil entre PAR et PDO<br><br>
+                
+                <strong>📸 Photos DOE :</strong><br>
+                <em>Pour PAR en chambre :</em><br>
+                • Phase 1 : Vue générale PAR/PDO<br>
+                • Phase 2 : Chambre ouverte, fourreaux identifiés<br>
+                • Phase 3 : Façades avec alvéoles visibles<br>
+                • Phase 4 : PDO ouvert, fourreaux visibles<br><br>
+                
+                <em>Pour PAR sur poteau :</em><br>
+                • Phase 1 : Vue générale + PDO<br>
+                • Phase 2 : Fourreaux au pied du poteau
+                
+                <div class="quick-actions">
+                    <button class="quick-button" onclick="sendQuickMessage('Expliquer PAR et PDO')">🔍 PAR/PDO</button>
+                    <button class="quick-button" onclick="sendQuickMessage('Format coordonnées GPS')">📍 GPS</button>
+                </div>
+            `, 'bot');
+        }
+
+        function showSubmissionInstructions() {
+            addMessage(`
+                📤 <strong>Comment soumettre votre DOE :</strong><br><br>
+                
+                1. <strong>Préparez vos fichiers :</strong><br>
+                   • Plan DOE (PDF recommandé)<br>
+                   • Photos des différentes phases<br>
+                   • Format accepté : PDF, JPG, PNG<br><br>
+                
+                2. <strong>Utilisez le bouton 📎</strong> pour joindre vos fichiers<br><br>
+                
+                3. <strong>Envoyez un message</strong> pour lancer l'analyse<br><br>
+                
+                4. <strong>Recevez le verdict</strong> avec détails des points conformes/non-conformes<br><br>
+                
+                ⚡ <strong>Analyse automatique en temps réel !</strong>
+                
+                <div class="quick-actions">
+                    <button class="quick-button" onclick="document.getElementById('fileInput').click()">📎 Joindre fichiers</button>
+                </div>
+            `, 'bot');
+        }
+
+        function showValidExample() {
+            addMessage(`
+                ✅ <strong>Exemple de DOE VALIDÉ :</strong><br><br>
+                
+                <strong>Plan DOE conforme :</strong><br>
+                • PAR : 48°32'41.9"N / 2°06'47.9"E ✅<br>
+                • PDO : 48°32'41.9"N / 2°06'48.0"E ✅<br>
+                • Tracé Génie Civil : Ligne verte visible ✅<br>
+                • Identification claire des points ✅<br><br>
+                
+                <strong>Photos conformes (PAR poteau) :</strong><br>
+                • Phase 1 : Vue générale PAR/PDO ✅<br>
+                • Phase 2 : Fourreaux au pied poteau ✅<br>
+                • Bonus : PDO ouvert avec fourreaux A,B,C,D ✅<br><br>
+                
+                🎯 <strong>Points clés du succès :</strong><br>
+                • Documentation complète<br>
+                • Coordonnées GPS précises<br>
+                • Photos de qualité<br>
+                • Respect des phases requises
+                
+                <div class="quick-actions">
+                    <button class="quick-button" onclick="sendQuickMessage('Quels sont les critères de validation ?')">📝 Voir critères</button>
+                </div>
+            `, 'bot');
+        }
+
+        function explainPARPDO() {
+            addMessage(`
+                🔍 <strong>PAR et PDO - Explications :</strong><br><br>
+                
+                <strong>🏠 PAR (Point d'Accès aux Réseaux) :</strong><br>
+                • Situé en domaine public<br>
+                • Point de raccordement au réseau<br>
+                • Peut être en chambre ou sur poteau<br>
+                • Doit être clairement identifié sur le plan<br><br>
+                
+                <strong>🔌 PDO (Point de Démarcation Optique) :</strong><br>
+                • Situé en partie privative<br>
+                • Équivaut à un regard<br>
+                • Point de démarcation entre réseau et installation<br>
+                • Coordonnées GPS obligatoires<br><br>
+                
+                <strong>🛣️ Tracé Génie Civil :</strong><br>
+                • Parcours entre PAR et PDO<br>
+                • Doit être visible sur le plan<br>
+                • Représente le cheminement des fourreaux
+                
+                <div class="quick-actions">
+                    <button class="quick-button" onclick="sendQuickMessage('Photos phases PAR chambre')">📸 Photos PAR</button>
+                </div>
+            `, 'bot');
+        }
+
+        function explainGPS() {
+            addMessage(`
+                📍 <strong>Coordonnées GPS - Format requis :</strong><br><br>
+                
+                <strong>Format accepté : WGS84 (4326)</strong><br><br>
+                
+                <strong>Exemples conformes :</strong><br>
+                • Format degrés décimaux :<br>
+                  X : 0.516949382439093<br>
+                  Y : 50.14595915932007<br><br>
+                
+                • Format degrés/minutes/secondes :<br>
+                  48°32'41.9"N / 2°06'47.9"E<br><br>
+                
+                <strong>⚠️ Points importants :</strong><br>
+                • Coordonnées obligatoires pour PAR ET PDO<br>
+                • Précision minimale 6 décimales<br>
+                • Vérifier la cohérence géographique<br>
+                • Utiliser un GPS professionnel si possible<br><br>
+                
+                <strong>❌ Erreurs fréquentes :</strong><br>
+                • Coordonnées manquantes<br>
+                • Format incorrect<br>
+                • Précision insuffisante
+            `, 'bot');
+        }
+
+        function explainPhotos() {
+            addMessage(`
+                📸 <strong>Guide Photos DOE :</strong><br><br>
+                
+                <strong>🏗️ PAR en CHAMBRE (4 phases) :</strong><br>
+                • <strong>Phase 1 :</strong> Vue générale situant PAR et PDO<br>
+                • <strong>Phase 2 :</strong> Chambre ouverte, fourreaux identifiés<br>
+                • <strong>Phase 3 :</strong> Chaque façade avec alvéoles visibles<br>
+                • <strong>Phase 4 :</strong> PDO ouvert, arrivée fourreaux<br><br>
+                
+                <strong>🔌 PAR sur POTEAU (2 phases) :</strong><br>
+                • <strong>Phase 1 :</strong> Vue générale + PDO visible<br>
+                • <strong>Phase 2 :</strong> Fourreaux identifiés au pied<br><br>
+                
+                <strong>💡 Conseils qualité :</strong><br>
+                • Éclairage suffisant<br>
+                • Identification claire des éléments<br>
+                • Marquage A, B, C, D des fourreaux<br>
+                • XpFibre recommande percussion petit pied<br><br>
+                
+                <strong>🎯 Objectif :</strong> Justifier la bonne réalisation des travaux
+                
+                <div class="quick-actions">
+                    <button class="quick-button" onclick="sendQuickMessage('Exemple DOE valide')">✅ Voir exemple</button>
+                </div>
+            `, 'bot');
+        }
+
+        function provideGeneralHelp() {
+            addMessage(`
+                🤖 <strong>Je suis là pour vous aider !</strong><br><br>
+                
+                Voici ce que je peux faire :<br><br>
+                
+                <strong>🔍 Validation DOE :</strong><br>
+                • Analyser vos plans et photos<br>
+                • Vérifier la conformité aux critères<br>
+                • Fournir un verdict détaillé<br><br>
+                
+                <strong>📚 Information :</strong><br>
+                • Expliquer les critères de validation<br>
+                • Détailler PAR, PDO, coordonnées GPS<br>
+                • Guider sur les phases photos<br><br>
+                
+                <strong>💬 Posez-moi vos questions sur :</strong><br>
+                • Les critères de validation<br>
+                • Le format des coordonnées GPS<br>
+                • Les phases photos requises<br>
+                • Les exemples de DOE<br>
+                • Comment soumettre un dossier
+                
+                <div class="quick-actions">
+                    <button class="quick-button" onclick="sendQuickMessage('Quels sont les critères de validation ?')">📝 Critères</button>
+                    <button class="quick-button" onclick="sendQuickMessage('Comment soumettre un DOE ?')">📤 Soumettre</button>
+                    <button class="quick-button" onclick="sendQuickMessage('Expliquer PAR et PDO')">🔍 PAR/PDO</button>
+                </div>
+            `, 'bot');
+        }
+
+        // Gestion de l'upload de fichiers
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            if (files.length > 0) {
+                uploadedFiles = files;
+                const fileNames = files.map(f => f.name).join(', ');
+                addMessage(`📎 Fichiers joints : ${fileNames}`, 'user');
+                
+                showTypingIndicator();
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    addMessage(`
+                        ✅ <strong>Fichiers reçus !</strong><br><br>
+                        J'ai bien reçu ${files.length} fichier(s) :<br>
+                        ${files.map(f => `• ${f.name}`).join('<br>')}<br><br>
+                        🔍 <strong>Prêt pour l'analyse !</strong><br>
+                        Envoyez un message pour lancer la validation de votre DOE.
+                        
+                        <div class="quick-actions">
+                            <button class="quick-button" onclick="sendQuickMessage('Analyser mon DOE')">🚀 Analyser</button>
+                        </div>
+                    `, 'bot');
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
