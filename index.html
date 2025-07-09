@@ -867,4 +867,120 @@
                 
                 case 'phase2':
                     // Phase 2 validée si photo phase2 détectée OU au moins 2 photos
-                    return fileAnalysis.photoPhases.
+                    return fileAnalysis.photoPhases.includes('phase2') || fileAnalysis.photos.length >= 2;
+                
+                case 'phase3':
+                    // Phase 3 validée si photo phase3 détectée OU au moins 3 photos
+                    return fileAnalysis.photoPhases.includes('phase3') || fileAnalysis.photos.length >= 3;
+                
+                case 'phase4':
+                    // Phase 4 validée si photo phase4 détectée OU au moins 4 photos
+                    return fileAnalysis.photoPhases.includes('phase4') || fileAnalysis.photos.length >= 4;
+                
+                default:
+                    return false;
+            }
+        }
+
+        function updateCriteriaStatus(criterionId, isValid) {
+            const criteriaItem = document.getElementById(criterionId);
+            const statusIcon = criteriaItem.querySelector('.status-icon');
+            
+            if (isValid) {
+                criteriaItem.className = 'criteria-item checked';
+                statusIcon.innerHTML = '<i class="fas fa-check-circle" style="color: #28a745;"></i>';
+            } else {
+                criteriaItem.className = 'criteria-item unchecked';
+                statusIcon.innerHTML = '<i class="fas fa-times-circle" style="color: #dc3545;"></i>';
+            }
+        }
+
+        function completeAnalysis() {
+            document.getElementById('loadingSpinner').style.display = 'none';
+            document.getElementById('analyzeButton').disabled = false;
+
+            // Calculate overall result
+            const totalCriteria = Object.keys(analysisResults).length;
+            const passedCriteria = Object.values(analysisResults).filter(result => result).length;
+
+            // Professional validation: ALL criteria must pass for validation (like the human expert)
+            const isValid = passedCriteria === totalCriteria;
+
+            displayResults(isValid, passedCriteria, totalCriteria);
+        }
+
+        function displayResults(isValid, passed, total) {
+            const resultSection = document.getElementById('resultSection');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultSubtitle = document.getElementById('resultSubtitle');
+            const conformePoints = document.getElementById('conformePoints');
+            const nonConformePoints = document.getElementById('nonConformePoints');
+            const corrections = document.getElementById('corrections');
+            const correctionsList = document.getElementById('correctionsList');
+
+            resultSection.style.display = 'block';
+
+            if (isValid) {
+                resultSection.className = 'result-section result-valid';
+                resultTitle.innerHTML = '<i class="fas fa-check-circle"></i> DOE VALIDÉ ✅';
+                resultTitle.style.color = '#155724';
+                resultSubtitle.textContent = 'Félicitations ! Votre DOE respecte tous les critères Rhôn\' Telecom.';
+                corrections.style.display = 'none';
+            } else {
+                resultSection.className = 'result-section result-invalid';
+                resultTitle.innerHTML = '<i class="fas fa-times-circle"></i> DOE REFUSÉ ❌';
+                resultTitle.style.color = '#721c24';
+                resultSubtitle.textContent = `Validation échouée: ${passed}/${total} critères respectés. Corrections requises.`;
+                corrections.style.display = 'block';
+            }
+
+            // Display conforme points
+            const conformeList = [];
+            const nonConformeList = [];
+            const correctionItems = [];
+
+            const criteriaDescriptions = {
+                'gps-coords': 'Coordonnées GPS/géoréférencement',
+                'par-identified': 'Identification du PAR',
+                'pdo-identified': 'Identification du PDO', 
+                'civil-engineering': 'Tracé du Génie Civil',
+                'phase1': 'Phase 1: Vue générale PAR/PDO',
+                'phase2': 'Phase 2: Fourreaux identifiés',
+                'phase3': 'Phase 3: Alvéoles visibles',
+                'phase4': 'Phase 4: PDO ouvert'
+            };
+
+            const correctionsNeeded = {
+                'gps-coords': 'Ajouter les coordonnées GPS au format WGS84 dans le nom du fichier plan (ex: plan_GPS_coordonnées.pdf)',
+                'par-identified': 'Identifier clairement le PAR dans le nom du fichier (ex: plan_PAR_identifié.pdf)',
+                'pdo-identified': 'Identifier clairement le PDO dans le nom du fichier (ex: plan_PDO_regard.pdf)',
+                'civil-engineering': 'S\'assurer que le plan contient les identifications PAR ET PDO pour valider le tracé',
+                'phase1': 'Fournir photo Phase 1 (nommer: phase1_vue_générale.jpg)',
+                'phase2': 'Fournir photo Phase 2 (nommer: phase2_fourreaux.jpg ou avoir au moins 2 photos)',
+                'phase3': 'Fournir photo Phase 3 (nommer: phase3_alvéoles.jpg ou avoir au moins 3 photos)',
+                'phase4': 'Fournir photo Phase 4 (nommer: phase4_PDO_ouvert.jpg ou avoir au moins 4 photos)'
+            };
+
+            Object.keys(analysisResults).forEach(criterionId => {
+                const description = criteriaDescriptions[criterionId];
+                if (analysisResults[criterionId]) {
+                    conformeList.push(`<div style="margin: 8px 0;"><i class="fas fa-check" style="color: #28a745; margin-right: 8px;"></i>${description}</div>`);
+                } else {
+                    nonConformeList.push(`<div style="margin: 8px 0;"><i class="fas fa-times" style="color: #dc3545; margin-right: 8px;"></i>${description}</div>`);
+                    correctionItems.push(`<div class="correction-item"><strong>• ${correctionsNeeded[criterionId]}</strong></div>`);
+                }
+            });
+
+            conformePoints.innerHTML = conformeList.length > 0 ? conformeList.join('') : '<div style="color: #6c757d; font-style: italic;">Aucun critère respecté</div>';
+            nonConformePoints.innerHTML = nonConformeList.length > 0 ? nonConformeList.join('') : '<div style="color: #28a745; font-style: italic;">Tous les critères sont respectés !</div>';
+            
+            if (correctionItems.length > 0) {
+                correctionsList.innerHTML = correctionItems.join('');
+            }
+        }
+
+        // Test pour vérifier que tout fonctionne
+        console.log('Analyseur DOE Intelligent chargé et prêt !');
+    </script>
+</body>
+</html>
