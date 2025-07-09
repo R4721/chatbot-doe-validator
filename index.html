@@ -33,16 +33,84 @@
             color: white;
             padding: 30px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
         }
 
         .logo {
             font-size: 32px;
             font-weight: bold;
-            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 15px;
+        }
+
+        .rt-logo {
+            background: linear-gradient(135deg, #00aaff 0%, #0088cc 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 25px rgba(0, 170, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rt-logo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .rt-logo .rhon {
+            font-size: 28px;
+            letter-spacing: 2px;
+        }
+
+        .rt-logo .telecom {
+            font-size: 16px;
+            background: #00aaff;
+            padding: 2px 8px;
+            border-radius: 8px;
+            margin-left: 5px;
         }
 
         .subtitle {
@@ -446,9 +514,15 @@
 <body>
     <div class="analyzer-container">
         <div class="header">
-            <div class="logo">
-                <i class="fas fa-brain"></i>
-                Analyseur DOE Intelligent
+            <div class="logo-container">
+                <div class="rt-logo">
+                    <span class="rhon">RHÔN'</span>
+                    <span class="telecom">TELECOM</span>
+                </div>
+                <div class="logo">
+                    <i class="fas fa-brain"></i>
+                    Analyseur DOE Intelligent
+                </div>
             </div>
             <div class="subtitle">IA d'analyse basée sur expertise Rhôn' Telecom</div>
             <div class="ai-badge">
