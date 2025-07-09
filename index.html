@@ -279,6 +279,7 @@
             background: #6c757d;
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
 
         .result-section {
@@ -466,7 +467,7 @@
                     L'IA analysera automatiquement vos fichiers
                 </div>
                 <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.jpg,.jpeg,.png">
-                <button class="upload-button" onclick="document.getElementById('fileInput').click()">
+                <button class="upload-button" onclick="triggerFileInput()">
                     <i class="fas fa-folder-open"></i> Choisir les fichiers
                 </button>
                 <div id="fileList" class="file-list"></div>
@@ -583,7 +584,26 @@
         let fileAnalysis = {};
         let analysisResults = {};
 
-        // Gestion du drag & drop
+        // Fonctions utilitaires
+        function triggerFileInput() {
+            document.getElementById('fileInput').click();
+        }
+
+        function getFileIcon(fileType) {
+            if (fileType.includes('pdf')) return 'fa-file-pdf';
+            if (fileType.includes('image')) return 'fa-file-image';
+            return 'fa-file';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Gestion du drag & drop et upload
         const uploadSection = document.getElementById('uploadSection');
         const fileInput = document.getElementById('fileInput');
 
@@ -603,11 +623,18 @@
             handleFiles(e.dataTransfer.files);
         });
 
+        uploadSection.addEventListener('click', (e) => {
+            if (e.target === uploadSection || e.target.classList.contains('upload-text') || e.target.classList.contains('upload-icon')) {
+                triggerFileInput();
+            }
+        });
+
         fileInput.addEventListener('change', (e) => {
             handleFiles(e.target.files);
         });
 
         function handleFiles(files) {
+            console.log('Files received:', files);
             uploadedFiles = Array.from(files);
             analyzeFiles();
             displayFileList();
@@ -678,6 +705,8 @@
                     }
                 }
             });
+
+            console.log('File analysis result:', fileAnalysis);
         }
 
         function displayFileList() {
@@ -748,20 +777,6 @@
             } else {
                 detectionSummary.style.display = 'none';
             }
-        }
-
-        function getFileIcon(fileType) {
-            if (fileType.includes('pdf')) return 'fa-file-pdf';
-            if (fileType.includes('image')) return 'fa-file-image';
-            return 'fa-file';
-        }
-
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
         function resetAnalysis() {
@@ -852,12 +867,4 @@
                 
                 case 'phase2':
                     // Phase 2 validée si photo phase2 détectée OU au moins 2 photos
-                    return fileAnalysis.photoPhases.includes('phase2') || fileAnalysis.photos.length >= 2;
-                
-                case 'phase3':
-                    // Phase 3 validée si photo phase3 détectée OU au moins 3 photos
-                    return fileAnalysis.photoPhases.includes('phase3') || fileAnalysis.photos.length >= 3;
-                
-                case 'phase4':
-                    // Phase 4 validée si photo phase4 détectée OU au moins 4 photos
-                    return fileAnalysis.photoPhases.includes('phase4') || file
+                    return fileAnalysis.photoPhases.
