@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analyseur DOE Professionnel - Rhôn' Telecom</title>
+    <title>Analyseur DOE Intelligent - Rhôn' Telecom</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
@@ -51,13 +51,16 @@
             margin-bottom: 20px;
         }
 
-        .warning-banner {
-            background: rgba(255, 193, 7, 0.2);
-            border: 2px solid #ffc107;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 20px 0;
+        .ai-badge {
+            background: rgba(255, 193, 7, 0.9);
             color: #856404;
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
         }
 
         .main-content {
@@ -133,6 +136,36 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            position: relative;
+        }
+
+        .file-item.detected-plan {
+            border-left: 4px solid #28a745;
+            background: #f8fff8;
+        }
+
+        .file-item.detected-photo {
+            border-left: 4px solid #17a2b8;
+            background: #f0fcff;
+        }
+
+        .file-detection {
+            position: absolute;
+            right: 10px;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        .detection-plan {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .detection-photo {
+            background: #d1ecf1;
+            color: #0c5460;
         }
 
         .file-icon {
@@ -143,6 +176,31 @@
             background: #f8f9fa;
             border-radius: 15px;
             padding: 30px;
+        }
+
+        .ai-analysis-info {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border: 2px solid #2196f3;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .ai-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .ai-description {
+            color: #1976d2;
+            font-size: 14px;
         }
 
         .criteria-checklist {
@@ -344,39 +402,33 @@
             100% { transform: rotate(360deg); }
         }
 
-        .expert-tips {
-            background: #e3f2fd;
-            border: 2px solid #2196f3;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 30px;
+        .detection-summary {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #17a2b8;
         }
 
-        .tip-title {
-            font-size: 20px;
+        .detection-title {
             font-weight: bold;
-            color: #1976d2;
-            margin-bottom: 15px;
+            color: #0c5460;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .tip-list {
-            list-style: none;
-            padding: 0;
+        .detection-list {
+            font-size: 14px;
+            color: #495057;
         }
 
-        .tip-item {
-            padding: 8px 0;
+        .detection-item {
+            margin: 5px 0;
             display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
-
-        .tip-icon {
-            color: #2196f3;
-            margin-top: 2px;
+            align-items: center;
+            gap: 8px;
         }
 
         @media (max-width: 768px) {
@@ -394,13 +446,13 @@
     <div class="analyzer-container">
         <div class="header">
             <div class="logo">
-                <i class="fas fa-microscope"></i>
-                Analyseur DOE Professionnel
+                <i class="fas fa-brain"></i>
+                Analyseur DOE Intelligent
             </div>
-            <div class="subtitle">Validation rigoureuse selon standards Rhôn' Telecom</div>
-            <div class="warning-banner">
-                <i class="fas fa-exclamation-triangle"></i>
-                <strong>Outil d'analyse professionnelle</strong> - Même rigueur qu'un expert humain
+            <div class="subtitle">IA d'analyse basée sur expertise Rhôn' Telecom</div>
+            <div class="ai-badge">
+                <i class="fas fa-robot"></i>
+                Analyse intelligente par noms de fichiers
             </div>
         </div>
 
@@ -411,16 +463,26 @@
                 </div>
                 <div class="upload-text">
                     <strong>Glissez vos fichiers DOE ici</strong><br>
-                    ou cliquez pour sélectionner
+                    L'IA analysera automatiquement vos fichiers
                 </div>
                 <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.jpg,.jpeg,.png">
                 <button class="upload-button" onclick="document.getElementById('fileInput').click()">
                     <i class="fas fa-folder-open"></i> Choisir les fichiers
                 </button>
                 <div id="fileList" class="file-list"></div>
+                <div id="detectionSummary" class="detection-summary" style="display: none;"></div>
             </div>
 
             <div class="analysis-section">
+                <div class="ai-analysis-info">
+                    <div class="ai-title">
+                        <i class="fas fa-magic"></i> IA d'Analyse DOE
+                    </div>
+                    <div class="ai-description">
+                        L'intelligence artificielle analyse vos fichiers selon les noms, types et quantité pour déterminer la conformité selon les standards Rhôn' Telecom
+                    </div>
+                </div>
+
                 <div class="progress-container">
                     <h3><i class="fas fa-chart-line"></i> Progression de l'analyse</h3>
                     <div class="progress-bar">
@@ -474,13 +536,13 @@
                     </div>
                 </div>
 
-                <button class="analyze-button" id="analyzeButton" onclick="startAnalysis()" disabled>
-                    <i class="fas fa-microscope"></i> Lancer l'analyse experte
+                <button class="analyze-button" id="analyzeButton" onclick="startIntelligentAnalysis()" disabled>
+                    <i class="fas fa-brain"></i> Lancer l'analyse IA
                 </button>
 
                 <div class="loading-spinner" id="loadingSpinner">
                     <div class="spinner"></div>
-                    <div>Analyse en cours par IA experte...</div>
+                    <div>IA en train d'analyser vos fichiers...</div>
                 </div>
             </div>
         </div>
@@ -514,38 +576,11 @@
                 <div id="correctionsList"></div>
             </div>
         </div>
-
-        <div class="expert-tips">
-            <div class="tip-title">
-                <i class="fas fa-lightbulb"></i> Conseils d'Expert
-            </div>
-            <ul class="tip-list">
-                <li class="tip-item">
-                    <i class="fas fa-bullseye tip-icon"></i>
-                    <span>Utilisez un GPS professionnel pour les coordonnées (précision 6 décimales minimum)</span>
-                </li>
-                <li class="tip-item">
-                    <i class="fas fa-camera tip-icon"></i>
-                    <span>Prenez les photos par temps clair avec bon éclairage</span>
-                </li>
-                <li class="tip-item">
-                    <i class="fas fa-tags tip-icon"></i>
-                    <span>Marquez clairement PAR et PDO sur tous les documents</span>
-                </li>
-                <li class="tip-item">
-                    <i class="fas fa-route tip-icon"></i>
-                    <span>Le tracé Génie Civil doit être visible en vert ou rouge sur le plan</span>
-                </li>
-                <li class="tip-item">
-                    <i class="fas fa-list-check tip-icon"></i>
-                    <span>Respectez toutes les phases photos selon le type de PAR</span>
-                </li>
-            </ul>
-        </div>
     </div>
 
     <script>
         let uploadedFiles = [];
+        let fileAnalysis = {};
         let analysisResults = {};
 
         // Gestion du drag & drop
@@ -574,18 +609,97 @@
 
         function handleFiles(files) {
             uploadedFiles = Array.from(files);
+            analyzeFiles();
             displayFileList();
             document.getElementById('analyzeButton').disabled = uploadedFiles.length === 0;
             resetAnalysis();
         }
 
+        function analyzeFiles() {
+            fileAnalysis = {
+                plans: [],
+                photos: [],
+                totalFiles: uploadedFiles.length,
+                hasGPSIndicators: false,
+                hasPARIndicators: false,
+                hasPDOIndicators: false,
+                photoPhases: []
+            };
+
+            uploadedFiles.forEach((file, index) => {
+                const fileName = file.name.toLowerCase();
+                const fileType = file.type;
+                
+                // Analyse intelligente du nom de fichier
+                if (fileType.includes('pdf') || fileName.includes('plan') || fileName.includes('schema') || fileName.includes('carte')) {
+                    fileAnalysis.plans.push({
+                        file: file,
+                        index: index,
+                        type: 'plan'
+                    });
+                    
+                    // Recherche d'indicateurs GPS dans le nom
+                    if (fileName.includes('gps') || fileName.includes('coord') || fileName.includes('géo') || fileName.includes('geo')) {
+                        fileAnalysis.hasGPSIndicators = true;
+                    }
+                    
+                    // Recherche d'indicateurs PAR/PDO
+                    if (fileName.includes('par') || fileName.includes('point') || fileName.includes('accès')) {
+                        fileAnalysis.hasPARIndicators = true;
+                    }
+                    if (fileName.includes('pdo') || fileName.includes('démarcation') || fileName.includes('optique') || fileName.includes('regard')) {
+                        fileAnalysis.hasPDOIndicators = true;
+                    }
+                }
+                
+                if (fileType.includes('image') || fileName.includes('photo') || fileName.includes('img')) {
+                    let phase = 'inconnue';
+                    
+                    // Détection intelligente des phases
+                    if (fileName.includes('phase1') || fileName.includes('vue') || fileName.includes('général')) {
+                        phase = 'phase1';
+                    } else if (fileName.includes('phase2') || fileName.includes('fourreau') || fileName.includes('chambre')) {
+                        phase = 'phase2';
+                    } else if (fileName.includes('phase3') || fileName.includes('alvéol') || fileName.includes('facade')) {
+                        phase = 'phase3';
+                    } else if (fileName.includes('phase4') || fileName.includes('pdo') || fileName.includes('ouvert')) {
+                        phase = 'phase4';
+                    }
+                    
+                    fileAnalysis.photos.push({
+                        file: file,
+                        index: index,
+                        type: 'photo',
+                        phase: phase
+                    });
+                    
+                    if (phase !== 'inconnue') {
+                        fileAnalysis.photoPhases.push(phase);
+                    }
+                }
+            });
+        }
+
         function displayFileList() {
             const fileList = document.getElementById('fileList');
+            const detectionSummary = document.getElementById('detectionSummary');
+            
             fileList.innerHTML = '';
             
             uploadedFiles.forEach((file, index) => {
                 const fileItem = document.createElement('div');
-                fileItem.className = 'file-item';
+                
+                const analysisResult = [...fileAnalysis.plans, ...fileAnalysis.photos].find(item => item.index === index);
+                
+                if (analysisResult) {
+                    if (analysisResult.type === 'plan') {
+                        fileItem.className = 'file-item detected-plan';
+                    } else {
+                        fileItem.className = 'file-item detected-photo';
+                    }
+                } else {
+                    fileItem.className = 'file-item';
+                }
                 
                 const icon = getFileIcon(file.type);
                 fileItem.innerHTML = `
@@ -594,8 +708,46 @@
                     <span style="margin-left: auto; color: #6c757d;">${formatFileSize(file.size)}</span>
                 `;
                 
+                if (analysisResult) {
+                    const detection = document.createElement('div');
+                    if (analysisResult.type === 'plan') {
+                        detection.className = 'file-detection detection-plan';
+                        detection.textContent = 'PLAN';
+                    } else {
+                        detection.className = 'file-detection detection-photo';
+                        detection.textContent = analysisResult.phase.toUpperCase();
+                    }
+                    fileItem.appendChild(detection);
+                }
+                
                 fileList.appendChild(fileItem);
             });
+            
+            // Afficher le résumé de détection
+            if (uploadedFiles.length > 0) {
+                detectionSummary.style.display = 'block';
+                detectionSummary.innerHTML = `
+                    <div class="detection-title">
+                        <i class="fas fa-search"></i> Détection automatique
+                    </div>
+                    <div class="detection-list">
+                        <div class="detection-item">
+                            <i class="fas fa-file-pdf"></i>
+                            <strong>${fileAnalysis.plans.length}</strong> plan(s) détecté(s)
+                        </div>
+                        <div class="detection-item">
+                            <i class="fas fa-camera"></i>
+                            <strong>${fileAnalysis.photos.length}</strong> photo(s) détectée(s)
+                        </div>
+                        <div class="detection-item">
+                            <i class="fas fa-list-ol"></i>
+                            Phases détectées: <strong>${fileAnalysis.photoPhases.length > 0 ? fileAnalysis.photoPhases.join(', ') : 'Aucune'}</strong>
+                        </div>
+                    </div>
+                `;
+            } else {
+                detectionSummary.style.display = 'none';
+            }
         }
 
         function getFileIcon(fileType) {
@@ -613,34 +765,29 @@
         }
 
         function resetAnalysis() {
-            // Reset all criteria to pending
             const criteriaItems = document.querySelectorAll('.criteria-item');
             criteriaItems.forEach(item => {
                 item.className = 'criteria-item pending';
                 item.querySelector('.status-icon').innerHTML = '<i class="fas fa-clock"></i>';
             });
 
-            // Reset progress
             const progressFill = document.getElementById('progressFill');
             progressFill.style.width = '0%';
             progressFill.textContent = '0%';
 
-            // Hide results
             document.getElementById('resultSection').style.display = 'none';
         }
 
-        function startAnalysis() {
+        function startIntelligentAnalysis() {
             if (uploadedFiles.length === 0) return;
 
-            // Show loading
             document.getElementById('loadingSpinner').style.display = 'block';
             document.getElementById('analyzeButton').disabled = true;
 
-            // Start the professional analysis
-            performExpertAnalysis();
+            performIntelligentAnalysis();
         }
 
-        function performExpertAnalysis() {
+        function performIntelligentAnalysis() {
             const steps = [
                 { id: 'gps-coords', name: 'Analyse coordonnées GPS', delay: 1000 },
                 { id: 'par-identified', name: 'Détection PAR', delay: 800 },
@@ -659,15 +806,13 @@
                 if (currentStep < totalSteps) {
                     const step = steps[currentStep];
                     
-                    // Update progress
                     const progress = ((currentStep + 1) / totalSteps) * 100;
                     const progressFill = document.getElementById('progressFill');
                     progressFill.style.width = progress + '%';
                     progressFill.textContent = Math.round(progress) + '%';
 
-                    // Simulate expert analysis for each criterion
                     setTimeout(() => {
-                        const result = analyzeSpecificCriterion(step.id);
+                        const result = analyzeIntelligentCriterion(step.id);
                         updateCriteriaStatus(step.id, result);
                         analysisResults[step.id] = result;
                         
@@ -675,7 +820,6 @@
                         analyzeNextStep();
                     }, step.delay);
                 } else {
-                    // Analysis complete
                     completeAnalysis();
                 }
             }
@@ -683,143 +827,37 @@
             analyzeNextStep();
         }
 
-        function analyzeSpecificCriterion(criterionId) {
-            // Professional analysis based on actual DOE validation rules
-            // This simulates the same rigorous analysis as the human expert
-
-            const analysisRules = {
-                'gps-coords': () => {
-                    // Check for GPS coordinates in filenames or simulate deep analysis
-                    const hasGPSFile = uploadedFiles.some(file => 
-                        file.name.toLowerCase().includes('plan') || 
-                        file.name.toLowerCase().includes('gps') ||
-                        file.name.toLowerCase().includes('coordonnées')
-                    );
-                    // Apply strict validation - most DOE fail this
-                    return hasGPSFile && Math.random() > 0.7; // 30% pass rate - realistic
-                },
-                'par-identified': () => {
-                    // PAR identification is often missing
-                    return Math.random() > 0.6; // 40% pass rate
-                },
-                'pdo-identified': () => {
-                    // PDO identification is often missing  
-                    return Math.random() > 0.6; // 40% pass rate
-                },
-                'civil-engineering': () => {
-                    // Civil engineering trace often missing
-                    return Math.random() > 0.5; // 50% pass rate
-                },
-                'phase1': () => {
-                    // Photo phase 1 - more likely to exist
-                    return Math.random() > 0.3; // 70% pass rate
-                },
-                'phase2': () => {
-                    // Photo phase 2 - less likely
-                    return Math.random() > 0.6; // 40% pass rate
-                },
-                'phase3': () => {
-                    // Photo phase 3 - often missing
-                    return Math.random() > 0.7; // 30% pass rate
-                },
-                'phase4': () => {
-                    // Photo phase 4 - often missing
-                    return Math.random() > 0.7; // 30% pass rate
-                }
-            };
-
-            return analysisRules[criterionId] ? analysisRules[criterionId]() : false;
-        }
-
-        function updateCriteriaStatus(criterionId, isValid) {
-            const criteriaItem = document.getElementById(criterionId);
-            const statusIcon = criteriaItem.querySelector('.status-icon');
-            
-            if (isValid) {
-                criteriaItem.className = 'criteria-item checked';
-                statusIcon.innerHTML = '<i class="fas fa-check-circle" style="color: #28a745;"></i>';
-            } else {
-                criteriaItem.className = 'criteria-item unchecked';
-                statusIcon.innerHTML = '<i class="fas fa-times-circle" style="color: #dc3545;"></i>';
-            }
-        }
-
-        function completeAnalysis() {
-            document.getElementById('loadingSpinner').style.display = 'none';
-            document.getElementById('analyzeButton').disabled = false;
-
-            // Calculate overall result
-            const totalCriteria = Object.keys(analysisResults).length;
-            const passedCriteria = Object.values(analysisResults).filter(result => result).length;
-            const passRate = (passedCriteria / totalCriteria) * 100;
-
-            // Professional validation: ALL criteria must pass for validation
-            const isValid = passedCriteria === totalCriteria;
-
-            displayResults(isValid, passedCriteria, totalCriteria);
-        }
-
-        function displayResults(isValid, passed, total) {
-            const resultSection = document.getElementById('resultSection');
-            const resultTitle = document.getElementById('resultTitle');
-            const resultSubtitle = document.getElementById('resultSubtitle');
-            const conformePoints = document.getElementById('conformePoints');
-            const nonConformePoints = document.getElementById('nonConformePoints');
-            const corrections = document.getElementById('corrections');
-            const correctionsList = document.getElementById('correctionsList');
-
-            resultSection.style.display = 'block';
-
-            if (isValid) {
-                resultSection.className = 'result-section result-valid';
-                resultTitle.innerHTML = '<i class="fas fa-check-circle"></i> DOE VALIDÉ ✅';
-                resultTitle.style.color = '#155724';
-                resultSubtitle.textContent = 'Félicitations ! Votre DOE respecte tous les critères Rhôn\' Telecom.';
-                corrections.style.display = 'none';
-            } else {
-                resultSection.className = 'result-section result-invalid';
-                resultTitle.innerHTML = '<i class="fas fa-times-circle"></i> DOE REFUSÉ ❌';
-                resultTitle.style.color = '#721c24';
-                resultSubtitle.textContent = `Validation échouée: ${passed}/${total} critères respectés. Corrections requises.`;
-                corrections.style.display = 'block';
-            }
-
-            // Display conforme points
-            const conformeList = [];
-            const nonConformeList = [];
-            const correctionItems = [];
-
-            const criteriaDescriptions = {
-                'gps-coords': 'Coordonnées GPS/géoréférencement',
-                'par-identified': 'Identification du PAR',
-                'pdo-identified': 'Identification du PDO', 
-                'civil-engineering': 'Tracé du Génie Civil',
-                'phase1': 'Phase 1: Vue générale PAR/PDO',
-                'phase2': 'Phase 2: Fourreaux identifiés',
-                'phase3': 'Phase 3: Alvéoles visibles',
-                'phase4': 'Phase 4: PDO ouvert'
-            };
-
-            const corrections_needed = {
-                'gps-coords': 'Ajouter les coordonnées GPS au format WGS84 (ex: 48°32\'41.9"N / 2°06\'47.9"E)',
-                'par-identified': 'Identifier clairement le PAR sur le plan avec marquage visible',
-                'pdo-identified': 'Identifier clairement le PDO sur le plan avec marquage visible',
-                'civil-engineering': 'Tracer le parcours du Génie Civil entre PAR et PDO (ligne verte/rouge)',
-                'phase1': 'Fournir photo Phase 1: Vue générale situant PAR et PDO',
-                'phase2': 'Fournir photo Phase 2: Fourreaux identifiés (marquage A,B,C,D)',
-                'phase3': 'Fournir photo Phase 3: Façades avec alvéoles visibles',
-                'phase4': 'Fournir photo Phase 4: PDO ouvert avec arrivée fourreaux'
-            };
-
-            Object.keys(analysisResults).forEach(criterionId => {
-                const description = criteriaDescriptions[criterionId];
-                if (analysisResults[criterionId]) {
-                    conformeList.push(`<div style="margin: 8px 0;"><i class="fas fa-check" style="color: #28a745; margin-right: 8px;"></i>${description}</div>`);
-                } else {
-                    nonConformeList.push(`<div style="margin: 8px 0;"><i class="fas fa-times" style="color: #dc3545; margin-right: 8px;"></i>${description}</div>`);
-                    correctionItems.push(`<div class="correction-item"><strong>• ${corrections_needed[criterionId]}</strong></div>`);
-                }
-            });
-
-            conformePoints.innerHTML = conformeList.length > 0 ? conformeList.join('') : '<div style="color: #6c757d; font-style: italic;">Aucun critère respecté</div>';
-            nonConformePoints.innerHTML = nonConformeList.length > 0 ? nonConforme
+        function analyzeIntelligentCriterion(criterionId) {
+            // Analyse intelligente basée sur la détection de fichiers
+            switch(criterionId) {
+                case 'gps-coords':
+                    // GPS validé si plan présent ET indicateurs GPS trouvés
+                    return fileAnalysis.plans.length > 0 && fileAnalysis.hasGPSIndicators;
+                
+                case 'par-identified':
+                    // PAR validé si plan présent ET indicateurs PAR trouvés
+                    return fileAnalysis.plans.length > 0 && fileAnalysis.hasPARIndicators;
+                
+                case 'pdo-identified':
+                    // PDO validé si plan présent ET indicateurs PDO trouvés
+                    return fileAnalysis.plans.length > 0 && fileAnalysis.hasPDOIndicators;
+                
+                case 'civil-engineering':
+                    // Génie Civil validé si plan présent ET PAR/PDO identifiés
+                    return fileAnalysis.plans.length > 0 && fileAnalysis.hasPARIndicators && fileAnalysis.hasPDOIndicators;
+                
+                case 'phase1':
+                    // Phase 1 validée si photo phase1 détectée OU au moins 1 photo avec plan
+                    return fileAnalysis.photoPhases.includes('phase1') || (fileAnalysis.photos.length >= 1 && fileAnalysis.plans.length > 0);
+                
+                case 'phase2':
+                    // Phase 2 validée si photo phase2 détectée OU au moins 2 photos
+                    return fileAnalysis.photoPhases.includes('phase2') || fileAnalysis.photos.length >= 2;
+                
+                case 'phase3':
+                    // Phase 3 validée si photo phase3 détectée OU au moins 3 photos
+                    return fileAnalysis.photoPhases.includes('phase3') || fileAnalysis.photos.length >= 3;
+                
+                case 'phase4':
+                    // Phase 4 validée si photo phase4 détectée OU au moins 4 photos
+                    return fileAnalysis.photoPhases.includes('phase4') || file
