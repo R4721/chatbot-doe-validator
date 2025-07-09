@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Validateur DOE - Rhôn' Telecom</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,10 +12,8 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -24,250 +21,96 @@
             padding: 20px;
         }
 
-        @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
         .chatbot-container {
             width: 100%;
-            max-width: 900px;
-            height: 700px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 25px;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+            max-width: 800px;
+            height: 600px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.2);
-            position: relative;
-        }
-
-        .chatbot-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
-            background-size: 400% 400%;
-            animation: gradientShift 3s ease infinite;
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
-            padding: 25px;
+            padding: 20px;
             text-align: center;
             position: relative;
-            overflow: hidden;
         }
 
-        .header::before {
+        .header::after {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+            top: 0;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23ffffff" x="10" y="40" width="80" height="20" rx="10"/><rect fill="%2300aaff" x="20" y="10" width="60" height="15" rx="7"/><rect fill="%2300aaff" x="20" y="75" width="60" height="15" rx="7"/></svg>') no-repeat center;
+            background-size: contain;
         }
 
         .logo {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: bold;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .logo-icon {
-            font-size: 32px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
+            margin-bottom: 5px;
         }
 
         .subtitle {
-            font-size: 16px;
+            font-size: 14px;
             opacity: 0.9;
-            position: relative;
-            z-index: 1;
-        }
-
-        .stats-bar {
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 20px;
-            background: rgba(0,0,0,0.05);
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 10px;
-            border-radius: 10px;
-            background: white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            min-width: 80px;
-            transition: transform 0.3s ease;
-        }
-
-        .stat-item:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-number {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #666;
-            margin-top: 5px;
         }
 
         .chat-area {
             flex: 1;
-            padding: 25px;
+            padding: 20px;
             overflow-y: auto;
-            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
-            position: relative;
-        }
-
-        .chat-area::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%);
-            pointer-events: none;
+            background: #f8f9fa;
         }
 
         .message {
-            margin-bottom: 20px;
-            animation: slideInUp 0.6s ease-out;
-            position: relative;
-            z-index: 1;
+            margin-bottom: 15px;
+            animation: slideIn 0.3s ease-out;
         }
 
-        @keyframes slideInUp {
+        @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(30px) scale(0.95);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
-                transform: translateY(0) scale(1);
+                transform: translateY(0);
             }
         }
 
         .bot-message {
             display: flex;
             align-items: flex-start;
-            gap: 15px;
+            gap: 10px;
         }
 
         .bot-avatar {
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 20px;
+            font-weight: bold;
             flex-shrink: 0;
-            position: relative;
-            overflow: hidden;
-            animation: avatarGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes avatarGlow {
-            0%, 100% {
-                box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
-            }
-            50% {
-                box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
-            }
-        }
-
-        .bot-avatar::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: shine 3s linear infinite;
-        }
-
-        @keyframes shine {
-            0% {
-                transform: translateX(-100%) translateY(-100%) rotate(45deg);
-            }
-            100% {
-                transform: translateX(100%) translateY(100%) rotate(45deg);
-            }
         }
 
         .message-content {
             background: white;
-            padding: 20px;
-            border-radius: 20px 20px 20px 8px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 15px;
+            border-radius: 15px 15px 15px 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             max-width: 80%;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .message-content::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
         }
 
         .user-message {
@@ -277,35 +120,20 @@
         .user-message .message-content {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border-radius: 20px 20px 8px 20px;
+            border-radius: 15px 15px 5px 15px;
             margin-left: auto;
             max-width: 80%;
         }
 
-        .user-message .message-content::before {
-            background: linear-gradient(90deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
-        }
-
         .input-area {
-            padding: 25px;
+            padding: 20px;
             background: white;
-            border-top: 1px solid rgba(0,0,0,0.1);
-            position: relative;
-        }
-
-        .input-area::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            border-top: 1px solid #eee;
         }
 
         .input-container {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             align-items: center;
         }
 
@@ -321,62 +149,36 @@
         }
 
         .file-button {
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            background: #f8f9fa;
             border: 2px solid #dee2e6;
-            border-radius: 15px;
-            padding: 12px;
+            border-radius: 10px;
+            padding: 10px;
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 55px;
-            height: 55px;
-            font-size: 18px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .file-button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.2) 0%, transparent 70%);
-            transition: all 0.4s ease;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .file-button:hover::before {
-            width: 200px;
-            height: 200px;
+            width: 45px;
+            height: 45px;
         }
 
         .file-button:hover {
-            border-color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+            background: #e9ecef;
+            border-color: #adb5bd;
         }
 
         .text-input {
             flex: 1;
-            padding: 15px 20px;
+            padding: 12px 15px;
             border: 2px solid #dee2e6;
-            border-radius: 30px;
+            border-radius: 25px;
             font-size: 16px;
             outline: none;
-            transition: all 0.4s ease;
-            background: white;
-            position: relative;
+            transition: border-color 0.3s ease;
         }
 
         .text-input:focus {
             border-color: #667eea;
-            box-shadow: 0 0 25px rgba(102, 126, 234, 0.2);
-            transform: translateY(-1px);
         }
 
         .send-button {
@@ -384,174 +186,105 @@
             color: white;
             border: none;
             border-radius: 50%;
-            width: 55px;
-            height: 55px;
+            width: 45px;
+            height: 45px;
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: transform 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .send-button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255,255,255,0.3);
-            transition: all 0.4s ease;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .send-button:hover::before {
-            width: 200px;
-            height: 200px;
         }
 
         .send-button:hover {
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+            transform: scale(1.05);
         }
 
         .send-button:active {
-            transform: translateY(0) scale(0.95);
+            transform: scale(0.95);
         }
 
         .validation-result {
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 15px;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
             font-weight: bold;
-            position: relative;
-            overflow: hidden;
-            animation: resultSlideIn 0.8s ease-out;
-        }
-
-        @keyframes resultSlideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
         }
 
         .valid {
-            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            background: #d4edda;
             color: #155724;
-            border: 2px solid #28a745;
-            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.2);
+            border: 1px solid #c3e6cb;
         }
 
         .invalid {
-            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            background: #f8d7da;
             color: #721c24;
-            border: 2px solid #dc3545;
-            box-shadow: 0 10px 25px rgba(220, 53, 69, 0.2);
+            border: 1px solid #f5c6cb;
         }
 
         .criteria-list {
-            margin-top: 15px;
+            margin-top: 10px;
             font-weight: normal;
         }
 
         .criteria-item {
-            margin: 8px 0;
+            margin: 5px 0;
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 8px;
-            border-radius: 8px;
-            background: rgba(255,255,255,0.5);
-            transition: transform 0.3s ease;
-        }
-
-        .criteria-item:hover {
-            transform: translateX(5px);
+            gap: 8px;
         }
 
         .check-mark {
             color: #28a745;
             font-weight: bold;
-            font-size: 16px;
         }
 
         .cross-mark {
             color: #dc3545;
             font-weight: bold;
-            font-size: 16px;
         }
 
         .quick-actions {
             display: flex;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 10px;
+            margin-top: 15px;
             flex-wrap: wrap;
         }
 
         .quick-button {
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            border: 2px solid transparent;
-            padding: 10px 18px;
-            border-radius: 25px;
+            background: #e9ecef;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
             cursor: pointer;
             font-size: 14px;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .quick-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .quick-button:hover::before {
-            left: 100%;
+            transition: all 0.3s ease;
         }
 
         .quick-button:hover {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #667eea;
             color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-            border-color: #667eea;
         }
 
         .typing-indicator {
             display: none;
             align-items: center;
-            gap: 15px;
-            padding: 0 25px 20px;
+            gap: 5px;
             color: #666;
             font-style: italic;
         }
 
         .typing-dots {
             display: flex;
-            gap: 5px;
+            gap: 3px;
         }
 
         .typing-dot {
-            width: 8px;
-            height: 8px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            width: 6px;
+            height: 6px;
+            background: #666;
             border-radius: 50%;
-            animation: typingBounce 1.4s ease-in-out infinite;
+            animation: typing 1.4s ease-in-out infinite;
         }
 
         .typing-dot:nth-child(2) {
@@ -562,202 +295,50 @@
             animation-delay: 0.4s;
         }
 
-        @keyframes typingBounce {
+        @keyframes typing {
             0%, 60%, 100% {
-                transform: translateY(0) scale(1);
-                opacity: 0.7;
+                transform: translateY(0);
+                opacity: 0.4;
             }
             30% {
-                transform: translateY(-12px) scale(1.2);
+                transform: translateY(-10px);
                 opacity: 1;
-            }
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            transform: translateX(400px);
-            transition: transform 0.5s ease;
-            z-index: 1000;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .floating-particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .particle {
-            position: absolute;
-            background: rgba(102, 126, 234, 0.1);
-            border-radius: 50%;
-            animation: float 20s linear infinite;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .chatbot-container {
-                height: 90vh;
-                margin: 20px 10px;
-                border-radius: 20px;
-            }
-
-            .header {
-                padding: 20px;
-            }
-
-            .logo {
-                font-size: 24px;
-            }
-
-            .stats-bar {
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-
-            .chat-area {
-                padding: 20px;
-            }
-
-            .quick-actions {
-                flex-direction: column;
-            }
-
-            .quick-button {
-                width: 100%;
-                text-align: center;
-            }
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 2px;
-            overflow: hidden;
-            margin-top: 10px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
-            border-radius: 2px;
-            transition: width 0.3s ease;
-            animation: progressShine 2s ease-in-out infinite;
-        }
-
-        @keyframes progressShine {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.7;
             }
         }
     </style>
 </head>
 <body>
-    <div class="floating-particles" id="particles"></div>
-    
     <div class="chatbot-container">
         <div class="header">
-            <div class="logo">
-                <i class="fas fa-search-plus logo-icon"></i>
-                Validateur DOE AI
-            </div>
-            <div class="subtitle">Assistant intelligent de validation - Rhôn' Telecom</div>
-            <div class="progress-bar">
-                <div class="progress-fill" style="width: 85%"></div>
-            </div>
-        </div>
-
-        <div class="stats-bar">
-            <div class="stat-item">
-                <span class="stat-number" id="validatedCount">142</span>
-                <div class="stat-label">Validés</div>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">99.2%</span>
-                <div class="stat-label">Précision</div>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">2.3s</span>
-                <div class="stat-label">Temps moyen</div>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">24/7</span>
-                <div class="stat-label">Disponible</div>
-            </div>
+            <div class="logo">🔍 Validateur DOE</div>
+            <div class="subtitle">Assistant de validation - Rhôn' Telecom</div>
         </div>
         
         <div class="chat-area" id="chatArea">
             <div class="message bot-message">
-                <div class="bot-avatar">
-                    <i class="fas fa-robot"></i>
-                </div>
+                <div class="bot-avatar">🤖</div>
                 <div class="message-content">
-                    <div><strong>🚀 Bienvenue dans le futur de la validation DOE !</strong></div>
-                    <div style="margin-top: 15px;">
-                        Je suis votre assistant IA spécialisé dans l'analyse des Dossiers des Ouvrages Exécutés. Grâce à mes algorithmes avancés, je peux analyser vos documents en quelques secondes !
-                    </div>
-                    <div style="margin-top: 15px;">
-                        <strong>🎯 Mes superpouvoir :</strong><br>
-                        <i class="fas fa-map-marked-alt" style="color: #667eea;"></i> Vérification GPS automatique<br>
-                        <i class="fas fa-eye" style="color: #667eea;"></i> Reconnaissance d'images PAR/PDO<br>
-                        <i class="fas fa-check-double" style="color: #667eea;"></i> Validation en temps réel<br>
-                        <i class="fas fa-chart-line" style="color: #667eea;"></i> Rapport détaillé instantané
+                    <div>Bonjour ! Je suis votre assistant pour valider les DOE (Dossier des Ouvrages Exécutés).</div>
+                    <div style="margin-top: 10px;">
+                        📋 <strong>Je vérifie :</strong><br>
+                        • Plans DOE avec coordonnées GPS<br>
+                        • Identification PAR et PDO<br>
+                        • Photos selon phases requises<br>
+                        • Conformité aux standards Rhôn' Telecom
                     </div>
                     <div class="quick-actions">
-                        <button class="quick-button" onclick="sendQuickMessage('🔍 Quels sont les critères de validation ?')">
-                            <i class="fas fa-clipboard-list"></i> Critères
-                        </button>
-                        <button class="quick-button" onclick="sendQuickMessage('📤 Comment soumettre un DOE ?')">
-                            <i class="fas fa-upload"></i> Soumettre
-                        </button>
-                        <button class="quick-button" onclick="sendQuickMessage('✨ Montrer un exemple magique')">
-                            <i class="fas fa-magic"></i> Exemple
-                        </button>
+                        <button class="quick-button" onclick="sendQuickMessage('Quels sont les critères de validation ?')">📝 Critères</button>
+                        <button class="quick-button" onclick="sendQuickMessage('Comment soumettre un DOE ?')">📤 Soumettre</button>
+                        <button class="quick-button" onclick="sendQuickMessage('Exemple DOE valide')">✅ Exemple</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="typing-indicator" id="typingIndicator">
-            <div class="bot-avatar">
-                <i class="fas fa-brain"></i>
-            </div>
+            <div class="bot-avatar">🤖</div>
             <div>
-                <span>IA en train d'analyser vos données</span>
+                <span>Assistant en train d'analyser</span>
                 <div class="typing-dots">
                     <div class="typing-dot"></div>
                     <div class="typing-dot"></div>
@@ -771,64 +352,34 @@
                 <div class="file-input-wrapper">
                     <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" multiple>
                     <label for="fileInput" class="file-button" title="Joindre des fichiers">
-                        <i class="fas fa-paperclip"></i>
+                        📎
                     </label>
                 </div>
-                <input type="text" id="textInput" class="text-input" placeholder="✨ Posez votre question ou envoyez votre DOE magique..." onkeypress="handleKeyPress(event)">
+                <input type="text" id="textInput" class="text-input" placeholder="Posez votre question ou envoyez votre DOE..." onkeypress="handleKeyPress(event)">
                 <button class="send-button" onclick="sendMessage()" title="Envoyer">
-                    <i class="fas fa-paper-plane"></i>
+                    ➤
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i> Fichier analysé avec succès !
-    </div>
-
     <script>
         let uploadedFiles = [];
-        let messageCount = 0;
         
-        // Animation des particules flottantes
-        function createParticles() {
-            const container = document.getElementById('particles');
-            for (let i = 0; i < 20; i++) {
-                setTimeout(() => {
-                    const particle = document.createElement('div');
-                    particle.className = 'particle';
-                    particle.style.left = Math.random() * 100 + '%';
-                    particle.style.width = particle.style.height = Math.random() * 10 + 5 + 'px';
-                    particle.style.animationDelay = Math.random() * 20 + 's';
-                    particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
-                    container.appendChild(particle);
-                    
-                    setTimeout(() => {
-                        particle.remove();
-                    }, 25000);
-                }, i * 1000);
+        const doeValidationCriteria = {
+            plan: {
+                gpsCoordinates: false,
+                parIdentified: false,
+                pdoIdentified: false,
+                civilEngineering: false
+            },
+            photos: {
+                phase1: false,
+                phase2: false,
+                phase3: false,
+                phase4: false
             }
-        }
-
-        // Lancer les particules
-        createParticles();
-        setInterval(createParticles, 25000);
-
-        // Mise à jour du compteur
-        function updateValidatedCount() {
-            const counter = document.getElementById('validatedCount');
-            const current = parseInt(counter.textContent);
-            counter.textContent = current + 1;
-        }
-
-        function showNotification(message) {
-            const notification = document.getElementById('notification');
-            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
-            notification.classList.add('show');
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
+        };
 
         function handleKeyPress(event) {
             if (event.key === 'Enter') {
@@ -849,14 +400,13 @@
             if (message || uploadedFiles.length > 0) {
                 addMessage(message, 'user');
                 textInput.value = '';
-                messageCount++;
                 
                 showTypingIndicator();
                 
                 setTimeout(() => {
                     hideTypingIndicator();
                     processMessage(message);
-                }, 2000);
+                }, 1500);
             }
         }
 
@@ -867,9 +417,7 @@
             
             if (sender === 'bot') {
                 messageDiv.innerHTML = `
-                    <div class="bot-avatar">
-                        <i class="fas fa-robot"></i>
-                    </div>
+                    <div class="bot-avatar">🤖</div>
                     <div class="message-content">${content}</div>
                 `;
             } else {
@@ -897,13 +445,12 @@
             if (uploadedFiles.length > 0) {
                 validateDOE();
                 uploadedFiles = [];
-                updateValidatedCount();
             } else if (lowerMessage.includes('critères') || lowerMessage.includes('validation')) {
                 showValidationCriteria();
             } else if (lowerMessage.includes('soumettre') || lowerMessage.includes('envoyer')) {
                 showSubmissionInstructions();
-            } else if (lowerMessage.includes('exemple') || lowerMessage.includes('magique')) {
-                showMagicalExample();
+            } else if (lowerMessage.includes('exemple')) {
+                showValidExample();
             } else if (lowerMessage.includes('par') || lowerMessage.includes('pdo')) {
                 explainPARPDO();
             } else if (lowerMessage.includes('coordonnées') || lowerMessage.includes('gps')) {
@@ -916,19 +463,280 @@
         }
 
         function validateDOE() {
-            const isValid = Math.random() > 0.25;
+            // Simulation de validation basée sur les fichiers uploadés
+            const isValid = Math.random() > 0.3; // 70% de chance d'être valide pour la demo
             
             if (isValid) {
                 addMessage(`
                     <div class="validation-result valid">
-                        <i class="fas fa-check-circle" style="font-size: 24px; margin-right: 10px;"></i>
-                        <strong>🎉 DOE VALIDÉ - PARFAIT !</strong>
+                        ✅ <strong>DOE VALIDÉ</strong>
                     </div>
                     <div class="criteria-list">
                         <div class="criteria-item">
-                            <span class="check-mark"><i class="fas fa-check-circle"></i></span> 
-                            <strong>Coordonnées GPS</strong> : Format WGS84 détecté ✨
+                            <span class="check-mark">✅</span> Plan DOE avec coordonnées GPS présentes
                         </div>
                         <div class="criteria-item">
-                            <span class="check-mark"><i class="fas fa-check-circle"></i></span> 
-                            <strong>PAR identifié</strong> : Reconnaissance automatique réussie
+                            <span class="check-mark">✅</span> PAR clairement identifié
+                        </div>
+                        <div class="criteria-item">
+                            <span class="check-mark">✅</span> PDO clairement identifié
+                        </div>
+                        <div class="criteria-item">
+                            <span class="check-mark">✅</span> Tracé du Génie Civil visible
+                        </div>
+                        <div class="criteria-item">
+                            <span class="check-mark">✅</span> Toutes les phases photos respectées
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <strong>Félicitations !</strong> Votre DOE respecte tous les critères de validation Rhôn' Telecom.
+                    </div>
+                `, 'bot');
+            } else {
+                addMessage(`
+                    <div class="validation-result invalid">
+                        ❌ <strong>DOE REFUSÉ</strong>
+                    </div>
+                    <div class="criteria-list">
+                        <div class="criteria-item">
+                            <span class="cross-mark">❌</span> Coordonnées GPS manquantes ou incorrectes
+                        </div>
+                        <div class="criteria-item">
+                            <span class="check-mark">✅</span> PAR identifié
+                        </div>
+                        <div class="criteria-item">
+                            <span class="cross-mark">❌</span> PDO non clairement identifié
+                        </div>
+                        <div class="criteria-item">
+                            <span class="cross-mark">❌</span> Photos Phase 3 manquantes
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <strong>Corrections requises :</strong><br>
+                        • Ajouter les coordonnées GPS au format WGS84<br>
+                        • Identifier clairement le PDO sur le plan<br>
+                        • Fournir les photos de la Phase 3 (alvéoles visibles)
+                    </div>
+                `, 'bot');
+            }
+        }
+
+        function showValidationCriteria() {
+            addMessage(`
+                📋 <strong>Critères de validation DOE :</strong><br><br>
+                
+                <strong>🗺️ Plan DOE :</strong><br>
+                • Coordonnées GPS/géoréférencement obligatoire<br>
+                • Identification claire du PAR (Point d'Accès Réseaux)<br>
+                • Identification claire du PDO (Point Démarcation Optique)<br>
+                • Tracé du Génie Civil entre PAR et PDO<br><br>
+                
+                <strong>📸 Photos DOE :</strong><br>
+                <em>Pour PAR en chambre :</em><br>
+                • Phase 1 : Vue générale PAR/PDO<br>
+                • Phase 2 : Chambre ouverte, fourreaux identifiés<br>
+                • Phase 3 : Façades avec alvéoles visibles<br>
+                • Phase 4 : PDO ouvert, fourreaux visibles<br><br>
+                
+                <em>Pour PAR sur poteau :</em><br>
+                • Phase 1 : Vue générale + PDO<br>
+                • Phase 2 : Fourreaux au pied du poteau
+                
+                <div class="quick-actions">
+                    <button class="quick-button" onclick="sendQuickMessage('Expliquer PAR et PDO')">🔍 PAR/PDO</button>
+                    <button class="quick-button" onclick="sendQuickMessage('Format coordonnées GPS')">📍 GPS</button>
+                </div>
+            `, 'bot');
+        }
+
+        function showSubmissionInstructions() {
+            addMessage(`
+                📤 <strong>Comment soumettre votre DOE :</strong><br><br>
+                
+                1. <strong>Préparez vos fichiers :</strong><br>
+                   • Plan DOE (PDF recommandé)<br>
+                   • Photos des différentes phases<br>
+                   • Format accepté : PDF, JPG, PNG<br><br>
+                
+                2. <strong>Utilisez le bouton 📎</strong> pour joindre vos fichiers<br><br>
+                
+                3. <strong>Envoyez un message</strong> pour lancer l'analyse<br><br>
+                
+                4. <strong>Recevez le verdict</strong> avec détails des points conformes/non-conformes<br><br>
+                
+                ⚡ <strong>Analyse automatique en temps réel !</strong>
+                
+                <div class="quick-actions">
+                    <button class="quick-button" onclick="document.getElementById('fileInput').click()">📎 Joindre fichiers</button>
+                </div>
+            `, 'bot');
+        }
+
+        function showValidExample() {
+            addMessage(`
+                ✅ <strong>Exemple de DOE VALIDÉ :</strong><br><br>
+                
+                <strong>Plan DOE conforme :</strong><br>
+                • PAR : 48°32'41.9"N / 2°06'47.9"E ✅<br>
+                • PDO : 48°32'41.9"N / 2°06'48.0"E ✅<br>
+                • Tracé Génie Civil : Ligne verte visible ✅<br>
+                • Identification claire des points ✅<br><br>
+                
+                <strong>Photos conformes (PAR poteau) :</strong><br>
+                • Phase 1 : Vue générale PAR/PDO ✅<br>
+                • Phase 2 : Fourreaux au pied poteau ✅<br>
+                • Bonus : PDO ouvert avec fourreaux A,B,C,D ✅<br><br>
+                
+                🎯 <strong>Points clés du succès :</strong><br>
+                • Documentation complète<br>
+                • Coordonnées GPS précises<br>
+                • Photos de qualité<br>
+                • Respect des phases requises
+                
+                <div class="quick-actions">
+                    <button class="quick-button" onclick="sendQuickMessage('Quels sont les critères de validation ?')">📝 Voir critères</button>
+                </div>
+            `, 'bot');
+        }
+
+        function explainPARPDO() {
+            addMessage(`
+                🔍 <strong>PAR et PDO - Explications :</strong><br><br>
+                
+                <strong>🏠 PAR (Point d'Accès aux Réseaux) :</strong><br>
+                • Situé en domaine public<br>
+                • Point de raccordement au réseau<br>
+                • Peut être en chambre ou sur poteau<br>
+                • Doit être clairement identifié sur le plan<br><br>
+                
+                <strong>🔌 PDO (Point de Démarcation Optique) :</strong><br>
+                • Situé en partie privative<br>
+                • Équivaut à un regard<br>
+                • Point de démarcation entre réseau et installation<br>
+                • Coordonnées GPS obligatoires<br><br>
+                
+                <strong>🛣️ Tracé Génie Civil :</strong><br>
+                • Parcours entre PAR et PDO<br>
+                • Doit être visible sur le plan<br>
+                • Représente le cheminement des fourreaux
+                
+                <div class="quick-actions">
+                    <button class="quick-button" onclick="sendQuickMessage('Photos phases PAR chambre')">📸 Photos PAR</button>
+                </div>
+            `, 'bot');
+        }
+
+        function explainGPS() {
+            addMessage(`
+                📍 <strong>Coordonnées GPS - Format requis :</strong><br><br>
+                
+                <strong>Format accepté : WGS84 (4326)</strong><br><br>
+                
+                <strong>Exemples conformes :</strong><br>
+                • Format degrés décimaux :<br>
+                  X : 0.516949382439093<br>
+                  Y : 50.14595915932007<br><br>
+                
+                • Format degrés/minutes/secondes :<br>
+                  48°32'41.9"N / 2°06'47.9"E<br><br>
+                
+                <strong>⚠️ Points importants :</strong><br>
+                • Coordonnées obligatoires pour PAR ET PDO<br>
+                • Précision minimale 6 décimales<br>
+                • Vérifier la cohérence géographique<br>
+                • Utiliser un GPS professionnel si possible<br><br>
+                
+                <strong>❌ Erreurs fréquentes :</strong><br>
+                • Coordonnées manquantes<br>
+                • Format incorrect<br>
+                • Précision insuffisante
+            `, 'bot');
+        }
+
+        function explainPhotos() {
+            addMessage(`
+                📸 <strong>Guide Photos DOE :</strong><br><br>
+                
+                <strong>🏗️ PAR en CHAMBRE (4 phases) :</strong><br>
+                • <strong>Phase 1 :</strong> Vue générale situant PAR et PDO<br>
+                • <strong>Phase 2 :</strong> Chambre ouverte, fourreaux identifiés<br>
+                • <strong>Phase 3 :</strong> Chaque façade avec alvéoles visibles<br>
+                • <strong>Phase 4 :</strong> PDO ouvert, arrivée fourreaux<br><br>
+                
+                <strong>🔌 PAR sur POTEAU (2 phases) :</strong><br>
+                • <strong>Phase 1 :</strong> Vue générale + PDO visible<br>
+                • <strong>Phase 2 :</strong> Fourreaux identifiés au pied<br><br>
+                
+                <strong>💡 Conseils qualité :</strong><br>
+                • Éclairage suffisant<br>
+                • Identification claire des éléments<br>
+                • Marquage A, B, C, D des fourreaux<br>
+                • XpFibre recommande percussion petit pied<br><br>
+                
+                <strong>🎯 Objectif :</strong> Justifier la bonne réalisation des travaux
+                
+                <div class="quick-actions">
+                    <button class="quick-button" onclick="sendQuickMessage('Exemple DOE valide')">✅ Voir exemple</button>
+                </div>
+            `, 'bot');
+        }
+
+        function provideGeneralHelp() {
+            addMessage(`
+                🤖 <strong>Je suis là pour vous aider !</strong><br><br>
+                
+                Voici ce que je peux faire :<br><br>
+                
+                <strong>🔍 Validation DOE :</strong><br>
+                • Analyser vos plans et photos<br>
+                • Vérifier la conformité aux critères<br>
+                • Fournir un verdict détaillé<br><br>
+                
+                <strong>📚 Information :</strong><br>
+                • Expliquer les critères de validation<br>
+                • Détailler PAR, PDO, coordonnées GPS<br>
+                • Guider sur les phases photos<br><br>
+                
+                <strong>💬 Posez-moi vos questions sur :</strong><br>
+                • Les critères de validation<br>
+                • Le format des coordonnées GPS<br>
+                • Les phases photos requises<br>
+                • Les exemples de DOE<br>
+                • Comment soumettre un dossier
+                
+                <div class="quick-actions">
+                    <button class="quick-button" onclick="sendQuickMessage('Quels sont les critères de validation ?')">📝 Critères</button>
+                    <button class="quick-button" onclick="sendQuickMessage('Comment soumettre un DOE ?')">📤 Soumettre</button>
+                    <button class="quick-button" onclick="sendQuickMessage('Expliquer PAR et PDO')">🔍 PAR/PDO</button>
+                </div>
+            `, 'bot');
+        }
+
+        // Gestion de l'upload de fichiers
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            if (files.length > 0) {
+                uploadedFiles = files;
+                const fileNames = files.map(f => f.name).join(', ');
+                addMessage(`📎 Fichiers joints : ${fileNames}`, 'user');
+                
+                showTypingIndicator();
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    addMessage(`
+                        ✅ <strong>Fichiers reçus !</strong><br><br>
+                        J'ai bien reçu ${files.length} fichier(s) :<br>
+                        ${files.map(f => `• ${f.name}`).join('<br>')}<br><br>
+                        🔍 <strong>Prêt pour l'analyse !</strong><br>
+                        Envoyez un message pour lancer la validation de votre DOE.
+                        
+                        <div class="quick-actions">
+                            <button class="quick-button" onclick="sendQuickMessage('Analyser mon DOE')">🚀 Analyser</button>
+                        </div>
+                    `, 'bot');
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
